@@ -14,5 +14,6 @@ This practical work contains three parts as each part explicits the following su
 
 This work was carried out in collaboration with the following group members:
 
-[<img src="https://github.com/abderrahimhamadi.png" width="60px;"/><br /><sub><ahref="https://github.com/abderrahimhamadi">abderrahimhamadi</a></sub>](https://github.com/abderrahimhamadi/peer-to-peer-tps
-[<img src="https://github.com/DataPioneer-dev.png" width="60px;"/><br /><sub><ahref="https://github.com/DataPioneer-dev">DataPioneer-dev</a></sub>](https://github.com/DataPioneer-dev/peer-to-peer-tps
+- **ZHAR Achraf**
+- **AIT HAMMOU Mouad**
+- **HAMADI Abderrahim**
