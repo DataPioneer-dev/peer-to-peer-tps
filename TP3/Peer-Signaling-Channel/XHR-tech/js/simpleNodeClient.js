@@ -2,6 +2,7 @@ var div = document.getElementById('scratchPad');
 var channel = prompt("Enter signaling channel name:");
 var xhr = new XMLHttpRequest();
 
+
 if (channel !== "") {
     var FirstTime = true;
     console.log('Trying to create or join channel: ', channel);
@@ -13,9 +14,9 @@ function createOrJoinChannel(channel, FirstTime) {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
         if (xhr.status === 200) {
+            console.log(xhr.status);
             var message = JSON.parse(xhr.responseText);
             console.log('Received message:', message);
-
             switch (message.type) {
                 case 'created':
                     console.log('channel ' + message.channel + ' has been created!');
@@ -32,14 +33,19 @@ function createOrJoinChannel(channel, FirstTime) {
                     div.insertAdjacentHTML('beforeEnd', '<p>Time: ' +
                         (performance.now() / 1000).toFixed(3) + ' --> channel ' + message.channel + ' is too crowded! Cannot allow you to enter, sorry :-( </p>');
                     break;
-                case 'remotePeerJoining':
+                case 'remotePeerJoining and broadcast:joined':
                     console.log('Request to join ' + message.channel);
-                    console.log('You are the initiator!');
                     div.insertAdjacentHTML('beforeEnd', '<p style="color:red">Time: ' +
                         (performance.now() / 1000).toFixed(3) +
                         ' --> Message from server: request to join channel ' +
                         message.channel + '</p>');
-                    sendMessage(JSON.stringify({type: 'craete or join', channel: channel, FirstTime: false}));
+                    div.insertAdjacentHTML('beforeEnd', '<p style="color:red">Time: ' +
+                        (performance.now() / 1000).toFixed(3) +
+                        ' --> Broadcast message from server: </p>');
+                    div.insertAdjacentHTML('beforeEnd', '<p style="color:red">' + xhr.responseText + '</p>');
+                    console.log('Broadcast message from server: ' + xhr.responseText);
+                    var myMessage = prompt('Insert message to be sent to your peer:', "");
+                    sendMessage(JSON.stringify({ type: 'message', message: myMessage, channel: channel}));
                     break;
                 case 'joined':
                     console.log('Message from server: ' + xhr.responseText);
@@ -51,15 +57,6 @@ function createOrJoinChannel(channel, FirstTime) {
                         (performance.now() / 1000).toFixed(3) +
                         ' --> Message from server: </p>');
                     div.insertAdjacentHTML('beforeEnd', '<p style="color:blue">' + xhr.responseText + '</p>');
-                    break;
-                case 'broadcast:joined':
-                    div.insertAdjacentHTML('beforeEnd', '<p style="color:red">Time: ' +
-                        (performance.now() / 1000).toFixed(3) +
-                        ' --> Broadcast message from server: </p>');
-                    div.insertAdjacentHTML('beforeEnd', '<p style="color:red">' + xhr.responseText + '</p>');
-                    console.log('Broadcast message from server: ' + xhr.responseText);
-                    var myMessage = prompt('Insert message to be sent to your peer:', "");
-                    sendMessage(JSON.stringify({ type: 'message', message: myMessage, channel: channel}));
                     break;
                 case 'log':
                     console.log.apply(console, message.array);
@@ -125,5 +122,6 @@ function sendMessage(message) {
     xhrMessage.setRequestHeader('Content-Type', 'application/json');
     xhrMessage.send(message);
 }
+
 
 

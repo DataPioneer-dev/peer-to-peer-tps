@@ -7,13 +7,13 @@ var app = http.createServer(function (req, res) {
 
 var io = require('socket.io')(app);
 
-io.sockets.on('connection', async function (socket) {
+io.sockets.on('connection', function (socket) {
   socket.on('message', function (message) {
-    log('S --> Got message: ', message);
-    socket.broadcast.to(message.channel).emit('message', message.message);
+      log('S --> Got message: ', message);
+      socket.broadcast.to(message.channel).emit('message', message.message);
   });
 
-  socket.on('create or join', async function (channel) {
+  socket.on('create or join', function (channel) {
     var numClients = io.sockets.adapter.rooms[channel] ? io.sockets.adapter.rooms[channel].length : 0;
     if (numClients == 0) {
         socket.join(channel, function() {

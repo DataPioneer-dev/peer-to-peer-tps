@@ -37,7 +37,6 @@ function createOrJoinChannel(channel) {
                 break;
             case 'remotePeerJoining':
                 console.log('Request to join ' + message.channel);
-                console.log('You are the initiator!');
                 div.insertAdjacentHTML('beforeEnd', '<p style="color:red">Time: ' +
                     (performance.now() / 1000).toFixed(3) +
                     ' --> Message from server: request to join channel ' +
@@ -60,7 +59,13 @@ function createOrJoinChannel(channel) {
                     ' --> Broadcast message from server: </p>');
                 div.insertAdjacentHTML('beforeEnd', '<p style="color:red">' + event.data + '</p>');
                 console.log('Broadcast message from server: ' + event.data);
-                var myMessage = prompt('Insert message to be sent to your peer:', "");
+                var messageNull = true;
+                while (messageNull) {
+                    var myMessage = prompt('Insert message to be sent to your peer:', "");
+                    if (myMessage) {
+                        messageNull = false;
+                    }
+                }
                 ws.send(JSON.stringify({ type: 'message', message: myMessage, channel: channel }));
                 break;
             case 'log':
@@ -72,7 +77,13 @@ function createOrJoinChannel(channel) {
                     (performance.now() / 1000).toFixed(3) +
                     ' --> Got message from other peer: </p>');
                 div.insertAdjacentHTML('beforeEnd', '<p style="color:blue">' + message.message + '</p>');
-                var myResponse = prompt('Send response to other peer:', "");
+                var messageNull = true;
+                while (messageNull) {
+                    var myResponse = prompt('Send response to other peer:', "");
+                    if (myResponse) {
+                        messageNull = false;
+                    }
+                }
                 ws.send(JSON.stringify({ type: 'response', message: myResponse, channel: channel }));
                 break;
             case 'response':
@@ -81,7 +92,13 @@ function createOrJoinChannel(channel) {
                     (performance.now() / 1000).toFixed(3) + ' --> Got response from other peer: </p>');
                 div.insertAdjacentHTML('beforeEnd', '<p style="color:blue">' +
                     message.message + '</p>');
-                var chatMessage = prompt('Keep on chatting. Write "Bye" to quit conversation', "");
+                var messageNull = true;
+                while (messageNull) {
+                    var chatMessage = prompt('Keep on chatting. Write "Bye" to quit conversation', "");
+                    if (chatMessage) {
+                        messageNull = false;
+                    }
+                }
                 if (chatMessage === "Bye") {
                     div.insertAdjacentHTML('beforeEnd', '<p>Time: ' +
                         (performance.now() / 1000).toFixed(3) + ' --> Sending "Bye" to server...</p>');

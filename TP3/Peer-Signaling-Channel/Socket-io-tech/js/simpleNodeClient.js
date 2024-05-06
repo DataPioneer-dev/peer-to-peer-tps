@@ -7,7 +7,7 @@ if (channel !== "") {
     socket.emit('create or join', channel);
 }
 
-socket.on('created', async function (channel){
+socket.on('created', function (channel){
     console.log('channel ' + channel + ' has been created!');
     console.log('This peer is the initiator...');
     div.insertAdjacentHTML('beforeEnd', '<p>Time: ' +
@@ -26,7 +26,6 @@ socket.on('full', function (channel){
 
 socket.on('remotePeerJoining', function (channel){
     console.log('Request to join ' + channel);
-    console.log('You are the initiator!');
     div.insertAdjacentHTML('beforeEnd', '<p style="color:red">Time: ' +
     (performance.now() / 1000).toFixed(3) +
     ' --> Message from server: request to join channel ' +
@@ -47,14 +46,20 @@ socket.on('joined', function (msg){
     msg + '</p>');
 });
 
-socket.on('broadcast:joined', function (msg){
+socket.on('broadcast:joined', async function (msg){
+    console.log('Broadcast message from server: ' + msg);
     div.insertAdjacentHTML('beforeEnd', '<p style="color:red">Time: ' +
     (performance.now() / 1000).toFixed(3) +
     ' --> Broadcast message from server: </p>');
     div.insertAdjacentHTML('beforeEnd', '<p style="color:red">' +
     msg + '</p>');
-    console.log('Broadcast message from server: ' + msg);
-    var myMessage = prompt('Insert message to be sent to your peer:', "");
+    var messageNull = true;
+    while (messageNull) {
+        var myMessage = prompt('Insert message to be sent to your peer:', "");
+        if (myMessage) {
+            messageNull = false;
+        }
+    }
     socket.emit('message', {
         channel: channel,
         message: myMessage
@@ -72,7 +77,13 @@ socket.on('message', function (message){
     ' --> Got message from other peer: </p>');
     div.insertAdjacentHTML('beforeEnd', '<p style="color:blue">' +
     message + '</p>');
-    var myResponse = prompt('Send response to other peer:', "");
+    var messageNull = true;
+    while (messageNull) {
+        var myResponse = prompt('Send response to other peer:', "");
+        if (myResponse) {
+            messageNull = false;
+        }
+    }
     socket.emit('response', {
         channel: channel,
         message: myResponse
@@ -85,7 +96,13 @@ socket.on('response', function (response){
     (performance.now() / 1000).toFixed(3) + ' --> Got response from other peer: </p>');
     div.insertAdjacentHTML('beforeEnd', '<p style="color:blue">' +
     response + '</p>');
-    var chatMessage = prompt('Keep on chatting. Write "Bye" to quit conversation', "");
+    var messageNull = true;
+    while (messageNull) {
+        var chatMessage = prompt('Keep on chatting. Write "Bye" to quit conversation', "");
+        if (chatMessage) {
+            messageNull = false;
+        }
+    }
     if(chatMessage === "Bye"){
         div.insertAdjacentHTML('beforeEnd', '<p>Time: ' +
         (performance.now() / 1000).toFixed(3) + ' --> Sending "Bye" to server...</p>');
