@@ -43,7 +43,8 @@ startButton.onclick = function() {
 sendButton.onclick = function() {
   const message = messageInput.value;
   messageInput.value = "";
-  receiveArea.value += message + "\n"; // Ajouter le texte entré à la receiveArea
+  receiveArea.value += message + "\n";
+  xhr = new XMLHttpRequest(); 
   xhr.open("POST", "http://localhost:8080/send", true);
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send(JSON.stringify({ type: "message", text: message }));
