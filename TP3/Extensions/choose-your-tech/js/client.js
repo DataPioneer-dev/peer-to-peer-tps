@@ -145,10 +145,6 @@ function createOrJoinChannelSocketIO(channel) {
         handleResponseCasRemotePeerJoiningSocket(channel)
     });
     
-    /*socket.on('joined', function (message){
-        handleResponseCasJoinedSocket(message);
-    });*/
-    
     socket.on('broadcast:joined', function (message){
         handleResponseCasBroadcastJoinedSocket(message, socket);
     });
@@ -162,7 +158,7 @@ function createOrJoinChannelSocketIO(channel) {
     });
     
     socket.on('response', function (response){
-        handleResponseCasResponseSocket(message, socket);
+        handleResponseCasResponseSocket(response, socket);
     });
     
     socket.on('Bye', function (){
@@ -272,7 +268,13 @@ function handleResponseCasBroadcastJoinedSocket(message, socket) {
         ' --> Broadcast message from server: </p>');
     div.insertAdjacentHTML('beforeEnd', '<p style="color:red">' + message + '</p>');
     console.log('Broadcast message from server: ' + message);
-    var myMessage = prompt('Insert message to be sent to your peer:', "");
+    var messageNull = true;
+    while (messageNull) {
+        var myMessage = prompt('Insert message to be sent to your peer:', "");
+        if (myMessage) {
+            messageNull = false;
+        }
+    }
     socket.emit('message', JSON.stringify({ message: myMessage, channel: channel}));
 }
 
@@ -282,7 +284,13 @@ function handleResponseCasBroadcastJoinedWS(event, ws) {
         ' --> Broadcast message from server: </p>');
     div.insertAdjacentHTML('beforeEnd', '<p style="color:red">' + event.data + '</p>');
     console.log('Broadcast message from server: ' + event.data);
-    var myMessage = prompt('Insert message to be sent to your peer:', "");
+    var messageNull = true;
+    while (messageNull) {
+        var myMessage = prompt('Insert message to be sent to your peer:', "");
+        if (myMessage) {
+            messageNull = false;
+        }
+    }
     sendMessageWS(JSON.stringify({ type: 'message', message: myMessage, channel: channel}), ws);
 }
 
@@ -302,7 +310,13 @@ function handleResponseCasMessageWS(message, ws) {
         (performance.now() / 1000).toFixed(3) +
         ' --> Got message from other peer: </p>');
     div.insertAdjacentHTML('beforeEnd', '<p style="color:blue">' + message.message + '</p>');
-    var myResponse = prompt('Send response to other peer:', "");
+    var messageNull = true;
+    while (messageNull) {
+        var myResponse = prompt('Send response to other peer:', "");
+        if (myResponse) {
+            messageNull = false;
+        }
+    }
     sendMessageWS(JSON.stringify({ type: 'response', message: myResponse, channel: channel}), ws);
 }
 
@@ -312,7 +326,13 @@ function handleResponseCasMessageSocket(message, socket) {
         (performance.now() / 1000).toFixed(3) +
         ' --> Got message from other peer: </p>');
     div.insertAdjacentHTML('beforeEnd', '<p style="color:blue">' + message + '</p>');
-    var myResponse = prompt('Send response to other peer:', "");
+    var messageNull = true;
+    while (messageNull) {
+        var myResponse = prompt('Send response to other peer:', "");
+        if (myResponse) {
+            messageNull = false;
+        }
+    }
     socket.emit('response' ,JSON.stringify({message: myResponse, channel: channel}));
 }
 
@@ -343,7 +363,13 @@ function handleResponseCasResponseWS(message, ws) {
         (performance.now() / 1000).toFixed(3) + ' --> Got response from other peer: </p>');
         div.insertAdjacentHTML('beforeEnd', '<p style="color:blue">' +
         message.message + '</p>');
-    var chatMessage = prompt('Keep on chatting. Write "Bye" to quit conversation', "");
+    var messageNull = true;
+    while (messageNull) {
+        var chatMessage = prompt('Keep on chatting. Write "Bye" to quit conversation', "");
+        if (chatMessage) {
+            messageNull = false;
+        }
+    }
     if (chatMessage === "Bye") {
         div.insertAdjacentHTML('beforeEnd', '<p>Time: ' +
             (performance.now() / 1000).toFixed(3) + ' --> Sending "Bye" to server...</p>');
@@ -364,7 +390,13 @@ function handleResponseCasResponseSocket(message, socket) {
         (performance.now() / 1000).toFixed(3) + ' --> Got response from other peer: </p>');
         div.insertAdjacentHTML('beforeEnd', '<p style="color:blue">' +
         message + '</p>');
-    var chatMessage = prompt('Keep on chatting. Write "Bye" to quit conversation', "");
+    var messageNull = true;
+    while (messageNull) {
+        var chatMessage = prompt('Keep on chatting. Write "Bye" to quit conversation', "");
+        if (chatMessage) {
+            messageNull = false;
+        }
+    }
     if (chatMessage === "Bye") {
         div.insertAdjacentHTML('beforeEnd', '<p>Time: ' +
             (performance.now() / 1000).toFixed(3) + ' --> Sending "Bye" to server...</p>');
